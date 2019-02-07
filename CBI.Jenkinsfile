@@ -3,6 +3,7 @@ pipeline {
 
   options {
     buildDiscarder(logRotator(numToKeepStr:'15'))
+    disableConcurrentBuilds()
   }
   
   tools {
