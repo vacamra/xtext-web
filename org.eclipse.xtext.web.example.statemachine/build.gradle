@@ -4,23 +4,12 @@ dependencies {
 	compile "org.eclipse.xtext:org.eclipse.xtext:$versions.xtext"
 	mwe2Compile "org.eclipse.xtext:org.eclipse.xtext.xtext.generator:$versions.xtext"
 	mwe2Compile "org.eclipse.xtext:org.eclipse.xtext.common.types:$versions.xtext"
-	mwe2Runtime 'org.eclipse.emf:org.eclipse.emf.mwe2.launch'
-	mwe2Runtime sourceSets.mwe2.output
 }
 
 sourceSets.mwe2.java.srcDir 'generator'
 
-
-task generateXtextLanguage(type: JavaExec) {
-	main = 'org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher'
+task generateExampleLanguages(type: XtextGeneratorTask) {
+	workflow = file('src/org/eclipse/xtext/web/example/statemachine/GenerateStatemachine.mwe2')
+	outputs.dir 'src-gen'
 	classpath = configurations.mwe2Runtime + configurations.compile + configurations.mwe2Compile
-	inputs.file "src/org/eclipse/xtext/web/example/statemachine/GenerateStatemachine.mwe2"
-	inputs.file "src/org/eclipse/xtext/web/example/statemachine/Statemachine.xtext"
-	outputs.dir "src-gen"
-	args += "src/org/eclipse/xtext/web/example/statemachine/GenerateStatemachine.mwe2"
-	args += "-p"
-	args += "rootPath=/${projectDir}/.."
 }
-
-generateXtext.dependsOn(generateXtextLanguage)
-clean.dependsOn(cleanGenerateXtextLanguage)
